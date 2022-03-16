@@ -1,31 +1,23 @@
 const express = require('express');
-const { route } = require('express/lib/application');
+const {
+    getBootCamps,
+    getBootCamp,
+    createBootCamp,
+    updateBootCamp,
+    deleteBootCamp
+} = require('../controllers/bootcamps')
+
 const router = express.Router();
 
+router
+    .route('/')
+    .get(getBootCamps)
+    .post(createBootCamp);
 
-router.get('/',(req,res)=>
-{
-    res.status(200).json({success : true, msg : 'Show all bootcamps'});
-});
 
-router.get('/:id',(req,res)=>
-{
-    res.status(200).json({success : true, msg : `Get bootcamp ${req.params.id}`});
-});
-
-router.post('/:id',(req,res) =>
-{
-    res.status(200).json({success : true, msg : 'Create new bootcamp'});
-});
-
-router.put('/:id',(req,res) =>
-{
-    res.status(200).json({success : true, msg : `Update bootcamp ${req.params.id}`});
-});
-
-router.delete('/:id',(req,res) =>
-{
-    res.status(200).json({success : true, msg : `Delete bootcamp ${req.params.id}`});
-});
+router.route('/:id')
+    .get(getBootCamp)
+    .put(updateBootCamp)
+    .delete(deleteBootCamp);
 
 module.exports = router;
