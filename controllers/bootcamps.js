@@ -28,7 +28,6 @@ exports.createBootCamp = (req, res, next) =>
 exports.updateBootCamp = (req, res, next) =>
 {
     res.status(200).json({success : true, msg : `Update bootcamp ${req.params.id}`});
-
 }
 
 // @Decsription Delete Bootcam
