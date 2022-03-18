@@ -2,7 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
+const errorHandler = require('./middleware/errors');
 const connectDB = require('./config/db.js');
+
 
 var util = require('util');
 var encoder = new util.TextEncoder('utf-8');
@@ -32,6 +34,8 @@ if (process.env.NODE_ENV === 'development') {
 
 // Mount routers
 app.use('/api/v1/bootcamps', bootcamps);
+
+app.use(errorHandler);
 
 
 
