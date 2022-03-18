@@ -20,6 +20,8 @@ connectDB();
 const bootcamps = require('./routes/bootcamps');
 
 const app = express();
+app.use(express.json());
+
 
 
 // Dev logging middleware
