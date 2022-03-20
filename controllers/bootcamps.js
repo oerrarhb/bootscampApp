@@ -7,7 +7,11 @@ const Bootcamp = require('../models/Bootcamp');
 // @Access Public
 exports.getBootCamps = asyncHandler(async (req, res, next) =>
 {
-        const bootcamps = await Bootcamp.find();
+        let queryStr = JSON.stringify(req.query);
+        // Follow the doc the extract the comparison
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/,match => `$${match}`);
+        let query = Bootcamp.find(JSON.parse(queryStr));
+        bootcamps = await query;
         res.status(200).json({success : true,count : bootcamps.length, data : bootcamps});
 });
 
