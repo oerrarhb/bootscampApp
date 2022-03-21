@@ -2,6 +2,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/aysnc');
 const geocoder = require('../utils/geocoder');
 const Bootcamp = require('../models/Bootcamp');
+const path = require('path');
 
 
 // @Decsription Get all bootcamps
@@ -155,4 +156,56 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) =>
             data : bootcamps
         }
     );
+});
+
+// @Decsription Upload photo for bootcamp
+// @Router PUT /api/v1/bootcamps/:id/photo
+// @Access Private
+exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) =>
+{
+        const bootcamp = await Bootcamp.findById(req.params.id);
+        if(!bootcamp)
+        {
+            return next(new ErrorResponse(`Bootcamp cannot be found with id of ${req.params.id}`,404));
+        }
+        if(!req.files)
+        {
+            return next(new ErrorResponse(`Please upload a file`,400));
+        }
+        const uploadedFile = req.files.image;
+
+        // Check file type
+        if(!uploadedFile.mimetype.startsWith('image'))
+        {
+            return next(new ErrorResponse(`Please load an image`,400));
+        }
+
+        // Check file size
+        if(uploadedFile.size > process.env.MAX_FILE_UPLOAD)
+        {
+            return next(new ErrorResponse(`Please load an image less than ${process.env.MAX_FILE_UPLOAD}`,400));
+        }
+
+        uploadedFile.name = `photo_${bootcamp._id}${path.parse(uploadedFile.name).ext}`;
+        
+        uploadedFile.mv(`${process.env.FILE_UPLOAD_PATH}/${uploadedFile.name}`, async err =>
+        {
+            if(err)
+            {
+                console.error(err);
+                return next(new ErrorResponse(`Problem with file upload`,500));
+            }
+
+            await Bootcamp.findByIdAndUpdate(req.params.id,
+                {
+                    photo : uploadedFile.name
+                });
+            
+            res.status(200).json(
+                {
+                    success : true,
+                    data : uploadedFile.name
+                }
+            );
+        });
 });
