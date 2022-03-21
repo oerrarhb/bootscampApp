@@ -19,9 +19,13 @@ exports.register = asyncHandler(async (req,res,next)=>
             password
         }
     );
+
+    const token = user.getSignedJWT();
+
     res.status(200).json(
         {
-            success : true
+            success : true,
+            token
         }
     )
 }
