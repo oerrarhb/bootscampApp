@@ -1,3 +1,11 @@
+### Documentation
+
+- Run the command below to generate the documentation
+
+```sh
+(cd bootcamp-api-documentation/ && npx serve)
+```
+
 ### DevBootCamp Specs
 
 - List all bootcamps in the database
@@ -88,7 +96,7 @@
 /api/v1/courses  
 /api/v1/reviews  
 /api/v1/auth  
-/api/v1/users  
+/api/v1/users
 
 ## Security
 
